@@ -1,0 +1,1 @@
+Crea la variable x ya que es el parametro que le pasa a la funcion arrow, es una nueva funcion y el parametro que se le pasa lo llama x

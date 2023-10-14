@@ -1,0 +1,18 @@
+function person (name){ 
+  function sayName (){
+      console.log('my name is ' + name);
+  };
+  return sayName();
+   
+};
+
+
+const Nerd = function (name){
+  const sayName = person(name) 
+  function doSomethingNerdy (){
+  console.log('nerd stuff');
+  } 
+  return doSomethingNerdy();
+};
+
+const jeff = Nerd('jeff'); 

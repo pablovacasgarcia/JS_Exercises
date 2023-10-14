@@ -1,0 +1,1 @@
+Es un ejemplo para explicar la sintaxis en el que () se usa para ejemplificar el parametro que se le pasa a la funcion

@@ -1,0 +1,1 @@
+Users es el array que se la pasa a la funcion y en cada posicion se le pasara un solo user a la funcion que devuelve sus datos
