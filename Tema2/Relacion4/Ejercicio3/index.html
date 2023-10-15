@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ejercicio JavaScript</title>
+        <script>
+            // Variables globales
+            let ventanaNueva;
+
+            // Función para abrir una ventana de confirmación
+            function abrirConfirmacion() {
+            const respuesta = confirm("¿Qué opción has pulsado?");
+            alert(respuesta ? "Has pulsado Aceptar" : "Has pulsado Cancelar");
+            }
+
+            // Función para abrir una ventana y analizar si se cerró o no
+            function abrirVentanaYAnalizar() {
+            ventanaNueva = window.open("", "ventanaNueva", "width=300, height=100");
+            setTimeout(function() {
+                if (ventanaNueva.closed) {
+                alert("La ventana se ha cerrado");
+                } else {
+                alert("La ventana está abierta");
+                }
+            }, 2000);
+            }
+        </script>
+    </head>
+    <body>
+        <p><a href="#" onclick="abrirConfirmacion();">a) Abrir ventana de confirmación</a></p>
+        <p><a href="#" onclick="abrirVentanaYAnalizar();">b) Abrir ventana y analizar cierre</a></p>
+    </body>
+</html>
