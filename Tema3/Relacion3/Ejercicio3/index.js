@@ -17,8 +17,10 @@ function buscar(tablero){
             document.write(tablero[fila][columna]+"<br>")
         }
     }
+    document.write("<br>La solucion es: "+tablero[posicion[0]][posicion[1]])
+
 }
 
 
 
-  buscar(crearTablero())
+  buscar(tablero)
