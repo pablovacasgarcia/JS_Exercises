@@ -32,14 +32,14 @@ Change the next book to be read property to be the first unread book you find in
 Booklists and Books might need more methods than that. Try to think of more that might be useful.*/
 
 class Booklist{
-    constructor(books){
+    constructor(books=[]){
         this.books=books;
         this.readBooks=(books.filter((book)=>book.read==true)).length;
         this.notReadBooks=(books.filter((book)=>book.read==false)).length;
         this.index=books.indexOf(books.find((book)=>book.read==false));
-        this.actualBook=books[index];
+        this.actualBook=books[this.index];
         this.lastBook=null;
-        this.nextBook=books.slice(index).find((book)=>book.read==false)
+        this.nextBook=books.slice(this.index+1).find((book)=>book.read==false)
     }
 
     add(book){
@@ -49,26 +49,75 @@ class Booklist{
         } else {
             this.readBooks+=1;
         }
+        if (this.books.indexOf(book)==0){
+            this.actualBook=book;
+        }
     }
 
     finishCurrentBook(){
-        this.readBooks++;
-        this.notReadBooks--;
-        this.lastBook=this.actualBook;
-        this.actualBook=this.nextBook;
-        this.index++;
-        this.nextBook=books.slice(index).find((book)=>book.read==false)
+        if (this.actualBook.read!=true){
+            this.readBooks++;
+            this.notReadBooks--;
+            this.actualBook.read=true;
+            this.actualBook.readDate=new Date(Date.now());
+            this.lastBook=this.actualBook;
+        } else {
+            console.log("Ya te has terminado el libro actual.")
+        }
+        
+        if (this.nextBook==undefined){
+            console.log("No hay más libros por leer, añade más libros para seguir leyendo");
+        } else {
+            this.actualBook=this.nextBook;
+            this.index=this.books.indexOf(this.actualBook);
+            this.nextBook=this.books.slice(this.index+1).find((book)=>book.read==false)
+        }
+        
     }
 }
 
 class Book{
 
-    constructor(title, genre, author, read, readDate=null){
+    constructor(title, genre, author, read=false, readDate=null){
         this.title=title;
         this.genre=genre;
         this.author=author;
         this.read=read;
         this.readDate=readDate;
     }
-ç
+
 }
+
+
+
+//Pruebas
+/*libros = [
+libro1=new Book("Libro1", "genero", "autor"),
+libro2=new Book("Libro2", "genero", "autor", true, new Date(Date.now())),
+libro3=new Book("Libro3", "genero", "autor"),
+libro4=new Book("Libro4", "genero", "autor", true, new Date(Date.now())),
+libro5=new Book("Libro5", "genero", "autor"),
+libro6=new Book("Libro6", "genero", "autor"),
+libro7=new Book("Libro7", "genero", "autor") ]
+
+
+libreria= new Booklist(libros);
+
+libreria.add(libro8=new Book("Libro8", "genero", "autor"));
+libreria.finishCurrentBook();
+libreria.finishCurrentBook();
+
+
+console.log(libreria.books);
+console.log(libreria.readBooks)
+console.log(libreria.notReadBooks)*/
+
+libreria= new Booklist();
+libreria.add(libro8=new Book("Libro8", "genero", "autor"));
+libreria.finishCurrentBook();
+libreria.finishCurrentBook();
+
+
+console.log(libreria.books);
+console.log(libreria.readBooks)
+console.log(libreria.notReadBooks)

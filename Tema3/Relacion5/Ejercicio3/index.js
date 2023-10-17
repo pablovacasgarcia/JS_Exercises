@@ -46,17 +46,17 @@
       }
   
       if (player1.movimiento === player2.movimiento) {
-        console.log("It's a tie!");
+        alert("It's a tie!");
       } else if (
-        (player1.movimiento === "Rock" && player2.movimiento === "Scissors") ||
-        (player1.movimiento === "Scissors" && player2.movimiento === "Paper") ||
-        (player1.movimiento === "Paper" && player2.movimiento === "Rock")
+        (player1.movimiento.movimiento === "Rock" && player2.movimiento.movimiento === "Scissors") ||
+        (player1.movimiento.movimiento === "Scissors" && player2.movimiento.movimiento === "Paper") ||
+        (player1.movimiento.movimiento === "Paper" && player2.movimiento.movimiento === "Rock")
       ) {
-        console.log(`${player1.name} wins!`);
+        alert(`${player1.name} wins!`);
         player1.wins++;
         player2.losses++;
       } else {
-        console.log(`${player2.name} wins!`);
+        alert(`${player2.name} wins!`);
         player2.wins++;
         player1.losses++;
       }
@@ -77,11 +77,20 @@
   roshamboGame.addPlayer(player2);
   
   // Players make their choices
-  player1.elegirMovimiento(new jugada("Rock"));
-  player2.elegirMovimiento(new jugada("Scissors"));
+  
   
   // Play a round
-  roshamboGame.playRound();
+  rondas=prompt("Introduce el número de rondas:")
+  for(let i=0; i<rondas; i++){
+    movimientos=["Rock", "Paper", "Scissors"];
+    movimiento=prompt("Elige un movimiento Rock, Paper, Scissors:");
+    player1.elegirMovimiento(new jugada(movimiento));
+    movimiento=movimientos[Math.floor(Math.random() * 2 + 1 )]
+    alert(movimiento)
+    player2.elegirMovimiento(new jugada(movimiento));
+    roshamboGame.playRound();
+  }
+  
   
   // Display player stats
   console.log(`${player1.name}: Wins ${player1.wins}, Losses ${player1.losses}`);
