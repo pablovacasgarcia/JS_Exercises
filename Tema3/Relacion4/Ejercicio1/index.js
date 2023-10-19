@@ -1,120 +1,168 @@
-/*Puzzle. Se desea implementar una web para la realizaci n de puzzles. Un puzzle no es ó
-m s que un tablero cuadrado con un hueco que podemos mover y que permite á
-reordenar las piezas. Se pide por tanto la implementaci n de una clase que represente ó
-este juego teniendo en cuenta:
-1. La dimensi n puede variar, se escoger en la creaci n. ó á ó
-2. El espacio en blanco s lo se mueve arriba, abajo, izquierda, derecha, controlando ó
-por supuesto que sea un movimiento v lido. á
-3. Debe llevarse un control del tiempo m nimo para resolverlo, as como el n mero de í í ú
-movimientos realizados.
-4. Los tableros se generar n aleatoriamente. á
-5. Implementar s un m todo dibujar() que imprimir en pantalla el tablero para poder á é á
-ser probado.*/
-
-
-class Puzzle{
-    BLANCO="";
-    constructor(dimension){
-        this.solucion=this.creartablero(dimension);
-        this.tablero=this.desordenar(this.solucion);
-        this.posBlanco=this.buscarBlanco(this.tablero);
+class Puzzle {
+    constructor(dimension) {
+      this.BLANCO = "";
+      this.dimension = dimension;
+      this.solucion = this.creartablero(dimension);
+      this.tablero =this.creartablero(dimension);
+      this.tablero = this.desordenar(this.tablero);
+      this.posBlanco = this.buscarBlanco(this.tablero);
     }
-
-
-    creartablero(dimension){
-        this.tablero=[];
-        this.numero=1;
-        for (let i=0; i<dimension; i++){
-            this.tablero[i]=[];
-            for (let j=0; j<dimension; j++){
-                this.tablero[i][j]=this.numero;
-                this.numero++;
-                if (this.numero==dimension*dimension){
-                    this.tablero[i][j]=this.BLANCO;
-                }
-            }
+  
+    creartablero(dimension) {
+      let tablero = [];
+      let numero = 1;
+      for (let i = 0; i < dimension; i++) {
+        tablero[i] = [];
+        for (let j = 0; j < dimension; j++) {
+          tablero[i][j] = numero;
+          numero++;
+          if (numero == dimension * dimension) {
+            tablero[i][j] = this.BLANCO;
+          }
         }
-        return this.tablero;
+      }
+      return tablero;
     }
-
-    desordenar(tablero){
-        for (let i=0; i<tablero.length; i++){
-            for (let j=0; j<tablero[i].length; j++){
-                this.fila = Math.floor(Math.random() * tablero.length);
-                this.columna = Math.floor(Math.random() * tablero[i].length);
-                this.auxiliar=tablero[this.fila][this.columna];
-                tablero[this.fila][this.columna]=tablero[i][j];
-                tablero[i][j]=this.auxiliar;
-            }
+  
+    desordenar(tablero) {
+      for (let i = 0; i < tablero.length; i++) {
+        for (let j = 0; j < tablero[i].length; j++) {
+          let fila = Math.floor(Math.random() * tablero.length);
+          let columna = Math.floor(Math.random() * tablero[i].length);
+          let auxiliar = tablero[fila][columna];
+          tablero[fila][columna] = tablero[i][j];
+          tablero[i][j] = auxiliar;
         }
-        return tablero;
+      }
+      return tablero;
     }
-
-    buscarBlanco(){
-        this.tablero.map((fila, filaIndex) => {
-            return fila.map((casilla, columnaIndex) => {
-              if (casilla === this.BLANCO) {
-                return [filaIndex, columnaIndex];
-              }
-            });
-          });
+  
+    buscarBlanco(tablero) {
+      for (let filaIndex = 0; filaIndex < tablero.length; filaIndex++) {
+        for (let columnaIndex = 0; columnaIndex < tablero[filaIndex].length; columnaIndex++) {
+          if (tablero[filaIndex][columnaIndex] === this.BLANCO) {
+            return [filaIndex, columnaIndex];
+          }
+        }
+      }
     }
-
-    mostrarTablero(){
-        document.write("<table>");
-        this.tablero.forEach(fila => {
-            document.write("<tr>")
-
-            fila.forEach(valor => {
-                document.write("<td>"+valor+"</td>");
-            });
-
-            document.write("</tr>")
+  
+    mostrarTablero() {
+      let output = "<table>";
+      this.tablero.forEach(fila => {
+        output += "<tr>";
+        fila.forEach(valor => {
+          output += "<td>" + valor + "</td>";
         });
-        document.write("</table>");
+        output += "</tr>";
+      });
+      output += "</table>";
+      document.getElementById("tablero").innerHTML = output;
     }
-
-    comprobarSolucion(){
-        return this.tablero.every((fila, filaIndex) =>
+  
+    comprobarSolucion() {
+      return this.tablero.every((fila, filaIndex) =>
         fila.every((casilla, columnaIndex) =>
           casilla === this.solucion[filaIndex][columnaIndex]
         )
       );
     }
-
-    mover(direccion){
-        switch (direccion){
-            case "U":
-                this.tablero[this.posBlanco[0]][this.posBlanco[1]]=this.tablero[this.posBlanco[0]+1][this.posBlanco[1]]
-                this.tablero[this.posBlanco[0]+1][this.posBlanco[1]]=this.BLANCO;
-                break;
-            case "D":
-                this.tablero[this.posBlanco[0]][this.posBlanco[1]]=this.tablero[this.posBlanco[0]-1][this.posBlanco[1]]
-                this.tablero[this.posBlanco[0]-1][this.posBlanco[1]]=this.BLANCO;
-                break;
-            case "L":
-                this.tablero[this.posBlanco[0]][this.posBlanco[1]]=this.tablero[this.posBlanco[0]][this.posBlanco[1]-1]
-                this.tablero[this.posBlanco[0]][this.posBlanco[1]-1]=this.BLANCO;
-                break;
-            case "R":
-                this.tablero[this.posBlanco[0]][this.posBlanco[1]]=this.tablero[this.posBlanco[0]][this.posBlanco[1]+1]
-                this.tablero[this.posBlanco[0]][this.posBlanco[1]+1]=this.BLANCO;
-                break;
+  
+    mover(direccion) {
+        const [filaBlanco, columnaBlanco] = this.posBlanco;
+        switch (direccion) {
+          case "U":
+            if (filaBlanco < this.dimension - 1) {
+              this.tablero[filaBlanco][columnaBlanco] = this.tablero[filaBlanco + 1][columnaBlanco];
+              this.tablero[filaBlanco + 1][columnaBlanco] = this.BLANCO;
+              this.posBlanco = [filaBlanco + 1, columnaBlanco];
+            }
+            break;
+          case "D":
+            if (filaBlanco > 0) {
+              this.tablero[filaBlanco][columnaBlanco] = this.tablero[filaBlanco - 1][columnaBlanco];
+              this.tablero[filaBlanco - 1][columnaBlanco] = this.BLANCO;
+              this.posBlanco = [filaBlanco - 1, columnaBlanco];
+            }
+            break;
+          case "L":
+            if (columnaBlanco < this.dimension - 1) {
+              this.tablero[filaBlanco][columnaBlanco] = this.tablero[filaBlanco][columnaBlanco + 1];
+              this.tablero[filaBlanco][columnaBlanco + 1] = this.BLANCO;
+              this.posBlanco = [filaBlanco, columnaBlanco + 1];
+            }
+            break;
+          case "R":
+            if (columnaBlanco > 0) {
+              this.tablero[filaBlanco][columnaBlanco] = this.tablero[filaBlanco][columnaBlanco - 1];
+              this.tablero[filaBlanco][columnaBlanco - 1] = this.BLANCO;
+              this.posBlanco = [filaBlanco, columnaBlanco - 1];
+            }
+            break;
         }
-    }
-
-    jugar(){
-        this.resuelto=false;
-
-        while(!this.resuelto){
-            this.mostrarTablero();
-
-            this.mover(promt("Elige movimiento: U, D, L, R"))
-
+      }
+    
+  
+    jugar() {
+      this.resuelto = false;
+      let movimientos = 0;
+      while (!this.resuelto) {
+        this.mostrarTablero();
+        let movimiento = prompt("Elige movimiento: U, D, L, R");
+        this.mover(movimiento);
+        movimientos++;
+        if (this.comprobarSolucion()) {
+          this.resuelto = true;
+          this.mostrarTablero();
+          alert(`¡Puzzle resuelto en ${movimientos} movimientos!`);
         }
+      }
     }
-}
+  }
+  
+  
 
-puzzle = new Puzzle(5);
-
-puzzle.jugar();
+  document.addEventListener("DOMContentLoaded", function () {
+    const puzzleContainer = document.getElementById("puzzle-container");
+    const moveUpButton = document.getElementById("move-up");
+    const moveDownButton = document.getElementById("move-down");
+    const moveLeftButton = document.getElementById("move-left");
+    const moveRightButton = document.getElementById("move-right");
+  
+    const puzzle = new Puzzle(3); // Cambia la dimensión según lo desees.
+    puzzle.mostrarTablero();
+  
+    moveUpButton.addEventListener("click", () => {
+      puzzle.mover("U");
+      puzzle.mostrarTablero();
+      if (puzzle.comprobarSolucion()) {
+        alert("¡Puzzle resuelto!");
+      }
+    });
+  
+    moveDownButton.addEventListener("click", () => {
+      puzzle.mover("D");
+      puzzle.mostrarTablero();
+      if (puzzle.comprobarSolucion()) {
+        alert("¡Puzzle resuelto!");
+      }
+    });
+  
+    moveLeftButton.addEventListener("click", () => {
+      puzzle.mover("L");
+      puzzle.mostrarTablero();
+      if (puzzle.comprobarSolucion()) {
+        alert("¡Puzzle resuelto!");
+      }
+    });
+  
+    moveRightButton.addEventListener("click", () => {
+      puzzle.mover("R");
+      puzzle.mostrarTablero();
+      if (puzzle.comprobarSolucion()) {
+        alert("¡Puzzle resuelto!");
+      }
+    });
+  });
+  
+  
