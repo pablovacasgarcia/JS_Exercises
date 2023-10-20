@@ -29,7 +29,7 @@ class TresEnRaya{
       }
       console.log(filaStr);
     }
-    console.log("---------");
+    console.log(" ");
   }
 
   jugar() {
