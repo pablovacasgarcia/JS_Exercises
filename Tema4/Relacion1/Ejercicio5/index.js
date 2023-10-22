@@ -1,10 +1,14 @@
 window.onload = () => {
-    createCanvas();
+    crearTabla();
     paintCell();
-  };
+    const boton = document.getElementById("botonBorrar");
+    boton.addEventListener("click", function() {
+      borrar();
+    });
+};
   
-  function createCanvas() {
-    const canvas = document.getElementById("canvas");
+  function crearTabla() {
+    const canvas = document.getElementById("tabla");
     for (let i = 0; i < 100; i++) {
       const row = document.createElement("tr");
       for (let j = 0; j < 100; j++) {
@@ -21,6 +25,15 @@ window.onload = () => {
       event.target.style.backgroundColor = "red";
     } else if (event.shiftKey) {
       event.target.style.backgroundColor = "blue";
+    } else if (event.altKey) {
+      event.target.style.backgroundColor = "white";
     }
-    // Si no se pulsa Ctrl ni Shift, no se pinta nada
+    
+  }
+
+  function borrar() {
+    const cells = document.querySelectorAll("td");
+    cells.forEach(cell => {
+      cell.style.backgroundColor = "white";
+    });
   }
