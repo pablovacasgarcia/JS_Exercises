@@ -1,11 +1,8 @@
 window.onload = () => {
     crearTabla();
-    paintCell();
     const boton = document.getElementById("botonBorrar");
-    boton.addEventListener("click", function() {
-      borrar();
-    });
-};
+    boton.addEventListener("click", borrar);
+
   
   function crearTabla() {
     const canvas = document.getElementById("tabla");
@@ -37,3 +34,4 @@ window.onload = () => {
       cell.style.backgroundColor = "white";
     });
   }
+}
