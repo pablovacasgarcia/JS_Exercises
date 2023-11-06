@@ -36,12 +36,14 @@ function shuffle(array) {
 function girar(e){
     div=e.target
 
-    div.style.transform= "rotateY(180deg)";
+    
     
 
     if(pulsados==0){
         if(!primero && pulsado1.id!="resuelto"){
+            pulsado1.style.transform= "rotateY(-180deg)";
             pulsado1.removeChild(imagen1);
+            pulsado2.style.transform= "rotateY(-180deg)";
             pulsado2.removeChild(imagen2);
         }
 
@@ -51,6 +53,8 @@ function girar(e){
         pulsado1=div;
         id1=pulsado1.id.split("")[0];
 
+        pulsado1.style.transform= "rotateY(180deg)";
+
         imagen1=document.createElement("img");
         imagen1.src="img/"+id1+".png";
         div.appendChild(imagen1)
@@ -59,6 +63,8 @@ function girar(e){
     } else if (pulsados==1){
         pulsado2=div;
         id2=pulsado2.id.split("")[0];
+
+        pulsado2.style.transform= "rotateY(180deg)";
 
         imagen2=document.createElement("img");
         imagen2.src="img/"+id2+".png";
