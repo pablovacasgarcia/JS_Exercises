@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p>
+        <input type="text" v-model="nota">
+        <button @click="añadirNotas()">Nueva nota</button>
+        </p>
+        <li v-for="item in notas">{{item}}</li>
+    </div>
+    
+    <script>
+      const { createApp } = Vue
+    
+      createApp({
+        data() {
+          return {
+            notas: [], 
+            nota: ""
+          }
+        },
+        methods:{
+            añadirNotas(){
+                this.notas.push(this.nota);
+                this.nota="";
+                console.log(this.notas);
+            }
+        }
+      }).mount('#app')
+    </script>
+</body>
+</html>

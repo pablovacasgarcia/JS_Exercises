@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <p>
+            <input type="text" v-model="nota" @keyup.enter="añadirNotas">
+            <button @click="añadirNotas">Nueva nota</button>
+            <img src="img/buscar.webp" alt="buscar" @click="buscarSiNo=!buscarSiNo">
+        </p>
+
+        
+
+        <div class="buscar" v-if="buscarSiNo">
+            <input type="text" v-model="filtro" placeholder="Buscar notas">
+        </div>
+
+        <p v-if="notas.length">Tienes {{ notasHechas.length }} tareas pendientes y {{ notas.length }} en total</p>
+        <p v-else>Aún no tienes tareas</p>
+        <p @click="borrarHechas" class="borrarTareas">	&#10007; Borrar tareas completadas</p>
+
+        <ul>
+            <li v-for="(item, pos) in notasFiltradas" :key="item.texto" :key="pos">
+                <div class="checkbox-wrapper-31">
+                    <input type="checkbox" @click="marcarHecha(item)" v-model="item.hecha">
+                    <svg viewBox="0 0 35.6 35.6">
+                      <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                      <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                      <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                    </svg>
+                </div>
+                
+                <div>
+                    <span :class="{ hecha: item.hecha }">{{ item.texto }}</span>
+                    <div>
+                        Prioridad: 
+                        <div>
+                            <button @click="cambiarPrioridad(item, 0)" :class="{prioridad: item.prioridad==0}">Baja</button>
+                            <button @click="cambiarPrioridad(item, 1)" :class="{prioridad: item.prioridad==1}">Media</button>
+                            <button @click="cambiarPrioridad(item, 2)" :class="{prioridad: item.prioridad==2}">Alta</button>
+                        </div>
+                    </div>
+                </div>
+                <img src="img/borrar.png" @click="borrarNota(item.fecha)" class="borrar">
+            </li>
+        </ul>
+    </div>
+    
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    notas: [],
+                    nota: "",
+                    buscarSiNo: false,
+                    filtro: "",
+                };
+            },
+            methods: {
+                añadirNotas() {
+                    this.notas.push({
+                        texto: this.nota,
+                        prioridad: 1,
+                        fecha: Date.now(),
+                        hecha: false
+                    });
+                    this.nota = "";
+                    this.saveToLocalStorage();
+                },
+
+                marcarHecha(item) {
+                    item.hecha = !item.hecha;
+                    this.saveToLocalStorage();
+                },
+
+                borrarNota(fecha){
+                    this.notas.forEach((nota, pos) => {
+                        if (nota.fecha==fecha){
+                            this.notas.splice(pos, 1);
+                            this.borrarNota(pos);
+                        }
+                    });
+                    this.saveToLocalStorage();
+                },
+
+                borrarHechas(){
+                    this.notas.forEach((nota, pos) => {
+                        if (nota.hecha){
+                            this.notas.splice(pos, 1);
+                            this.borrarNota(pos);
+                        }
+                    });
+                    this.saveToLocalStorage();
+                },
+
+                cambiarPrioridad(tarea, prioridad){
+                    tarea.prioridad=prioridad;
+                    this.saveToLocalStorage();
+                },
+
+                saveToLocalStorage() {
+                    localStorage.setItem('notas', JSON.stringify(this.notas));
+                },
+
+                loadFromLocalStorage() {
+                    storedNotas = localStorage.getItem('notas');
+                    this.notas = storedNotas ? JSON.parse(storedNotas) : [];
+                }
+            },
+            computed: {
+                notasFiltradas() {
+                    // Filter notes based on the search input
+                    aux = this.notas.filter((nota) =>
+                        nota.texto.toLowerCase().includes(this.filtro.toLowerCase())
+                    );
+
+                    return aux.sort((a,b)=>{
+                        if (a.prioridad < b.prioridad){
+                            return 1;
+                        } else if (a.prioridad > b.prioridad){
+                            return -1;
+                        } else {
+                            return 0;
+                        }
+                    })
+                },
+                notasHechas() {
+                    // Filter notes based on the search input
+                    return this.notas.filter((nota) =>
+                        nota.hecha==false
+                    );
+                }
+            },
+            mounted() {
+                this.loadFromLocalStorage();
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>
